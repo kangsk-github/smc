@@ -1,0 +1,50 @@
+// File : Quad Table
+program quad_table;
+#include ("stdlib.hhf");
+static
+iDataValue : int32 := 0;
+
+begin quad_table;
+stdout.put("Gimme a starting value : ");
+stdin.get(iDataValue);
+
+mov(iDataValue, EAX);
+mov(EAX, EBX);
+mov(EAX, ECX);
+
+stdout.put("Quad Table", nl);
+
+// EAX for inputting data and multiplying 4.
+stdout.puti32(EAX);
+stdout.put(" : ");
+// Use rol to move 2 bits. It means multiplying 4.
+rol(2, EAX);
+stdout.puti32(EAX);
+stdout.put(" ");
+rol(2, EAX);
+stdout.puti32(EAX);
+stdout.put(nl);
+
+// EBX for calculate (input+1) and multiplying 4
+add(1, EBX);
+stdout.puti32(EBX);
+stdout.put(" : "); 
+rol(2, EBX);
+stdout.puti32(EBX);
+stdout.put(" ");
+rol(2, EBX);
+stdout.puti32(EBX);
+stdout.put(nl);
+
+// ECX for calculate (input+2) and multiplying 4
+add(2, ECX);
+stdout.puti32(ECX);
+stdout.put(" : "); 
+rol(2, ECX);
+stdout.puti32(ECX);
+stdout.put(" ");
+rol(2, ECX);
+stdout.puti32(ECX);
+stdout.put(nl);
+
+end quad_table;

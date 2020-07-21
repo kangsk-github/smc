@@ -1,0 +1,43 @@
+// File : Big Number
+program big_number;
+#include ("stdlib.hhf");
+static
+iDataValue : int8;
+i : int8;
+j : int8;
+
+begin big_number;
+
+stdout.put("Gimme a decimal value to use as n : ");
+stdin.get(iDataValue);
+mov(iDataValue, BL);
+
+ForLpOdd:
+InitializeForLpOdd:
+mov(1, i);
+ForLpOddTerminationTest:
+cmp(i, BL);
+jnle ForLpOddDone;
+ForLpOddBody:
+stdout.puti8(i);
+ForLpOddIncrement:
+inc(i);
+inc(i);
+jmp ForLpOddTerminationTest;
+ForLpOddDone:
+
+ForLpEven:
+InitializeForLpEven:
+mov(2, j);
+ForLpEvenTerminationTest:
+cmp(j, BL);
+jnle ForLpEvenDone;
+ForLpEvenBody:
+stdout.puti8(j);
+ForLpEvenIncrement:
+inc(j);
+inc(j);
+jmp ForLpEvenTerminationTest;
+ForLpEvenDone:
+
+end big_number;

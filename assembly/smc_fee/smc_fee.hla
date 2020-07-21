@@ -1,0 +1,178 @@
+// File : smc_fee.hla
+program smc_fee;
+#include ("stdlib.hhf");
+
+static
+semester : int8:=0;
+enrolled_units : int8:=0;
+bool_resident : int8:=0;
+bool_parking : int8:=0;
+i : int8:=0;
+tuition : int16:=0;
+
+begin smc_fee;
+
+// Prompt the user.
+// Get two hex numbers by reading directly into a register.
+stdout.put("Fee me (2 hex digits with bits prsseeee) : ");
+stdin.get(BL);
+mov(BL, semester);
+// Erase binary numbers except two numbers representing semester code. 
+and(%0011_0000, semester);
+shr(4, semester);
+
+cmp(semester, 0);
+JE fall_semester;
+
+cmp(semester, 1);
+JE winter_semester;
+
+cmp(semester, 2);
+JE spring_semester;
+
+cmp(semester, 3);
+JE summer_semester;
+
+// Print out the semester Info.
+// Add service fee to tuition.
+fall_semester:
+stdout.put("Fall Semester", nl);
+add(55, tuition);
+jmp semester_done;
+
+winter_semester:
+stdout.put("Winter Semester", nl);
+add(52, tuition);
+jmp semester_done;
+
+spring_semester:
+stdout.put("Spring Semester", nl);
+add(55, tuition);
+jmp semester_done;
+
+summer_semester:
+stdout.put("Summer Semester", nl);
+add(52, tuition);
+jmp semester_done;
+
+semester_done:
+
+// Print out resident Info.
+mov(BL, enrolled_units);
+and(%0000_1111, enrolled_units);
+mov(enrolled_units, CL);
+stdout.put(enrolled_units, " units", nl);
+
+mov(BL, bool_resident);
+shr(6, bool_resident);
+and(%0000_0001, bool_resident);
+cmp(bool_resident, 1);
+JE resident_printout;
+JNE non_resident_printout;
+
+resident_printout:
+stdout.put("CA Resident", nl);
+jmp resident_printout_done;
+
+non_resident_printout:
+stdout.put("Non-Resident", nl);
+jmp resident_printout_done;
+
+resident_printout_done:
+
+// Print out parking fee Info.
+mov(BL, bool_parking);
+shr(7, bool_parking);
+and(%0000_0001, bool_parking);
+cmp(bool_parking, 1);
+JE parking_printout;
+JNE no_parking_printout;
+
+
+parking_printout:
+stdout.put("Parking", nl);
+jmp parking_printout_done;
+
+no_parking_printout:
+stdout.put("No Parking", nl);
+jmp parking_printout_done;
+
+parking_printout_done:
+
+// Add parking fee to tuition.
+mov(1, BL);
+cmp(bool_parking, BL);
+JE parking_fee_calculation;
+JNE units_calculation;
+
+parking_fee_calculation:
+mov(0, BL);
+cmp(BL, semester);
+JE fall_spring_parking;
+
+mov(1, BL);
+cmp(BL, semester);
+JE winter_summer_parking;
+
+mov(2, BL);
+cmp(BL, semester);
+JE fall_spring_parking;
+
+mov(3, BL);
+cmp(BL, semester);
+JE winter_summer_parking;
+
+fall_spring_parking:
+add(85, tuition);
+jmp units_calculation;
+
+winter_summer_parking:
+add(45, tuition);
+jmp units_calculation;
+
+// Add (enrolled units) * (enrollment fee) to tuition.
+units_calculation:
+
+cmp(bool_resident, 0);
+JE non_resident_calculation;
+JNE resident_calculation;
+
+non_resident_calculation:
+
+intialize_non_resident_ForLp_calculation:
+mov(0, i);
+
+non_resident_ForLp_termination_test:
+cmp(i, CL);
+jnl units_calculation_done;
+
+non_resident_ForLp_body:
+add(370, tuition);
+
+non_resident_ForLp_increment:
+inc(i);
+jmp non_resident_ForLp_termination_test;
+
+
+resident_calculation:
+
+intialize_resident_ForLp_calculation:
+mov(0, i);
+
+resident_ForLp_termination_test:
+cmp(i, CL);
+jnl units_calculation_done;
+
+resident_ForLp_body:
+add(46, tuition);
+
+resident_ForLp_increment:
+inc(i);
+jmp resident_ForLp_termination_test;
+
+units_calculation_done:
+
+// Print out total fees.
+stdout.put("Total Fees = $ ", tuition, nl);
+
+end smc_fee;

@@ -1,0 +1,64 @@
+program exercise;
+#include ("stdlib.hhf");
+
+static
+start : int8:=0;
+value : int8:=0;
+amount : int8:=0;
+bool_positive : int8:=0;
+i : int8:=0;
+j : int8:=0;
+
+begin exercise;
+
+stdout.put("Gimme data : ");
+stdin.get(start);
+mov(start, BL);
+mov(BL, value);
+
+calculation:
+
+intialize_ForLp_calculation:
+mov(1, i);
+stdout.put(start);
+
+ForLp_termination_test:
+cmp(i, BL);
+je calculation_done;
+
+cmp(bool_positive, 1);
+JE positive_calculation;
+JNE negative_calculation;
+
+positive_calculation:
+
+positive_ForLp_body:
+add(j, BL);
+stdout.put("_");
+stdout.puti8(BL);
+mov(value, BL);
+sub(1, bool_positive);
+
+positive_ForLp_increment:
+inc(i);
+jmp ForLp_termination_test;
+
+
+negative_calculation:
+
+negative_ForLp_body:
+inc(j);
+stdout.put("_");
+sub(j, BL);
+stdout.puti8(BL);
+mov(value, BL);
+add(1, bool_positive);
+
+negative_ForLp_increment:
+inc(i);
+
+jmp ForLp_termination_test;
+
+calculation_done:
+
+end exercise;

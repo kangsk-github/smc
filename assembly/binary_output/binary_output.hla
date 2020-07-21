@@ -1,0 +1,59 @@
+// File: Binary Output
+program binary_output;
+#include ("stdlib.hhf");
+static 
+iDataValue : int8 := 0;
+
+begin binary_output;
+stdout.put("Gimme a decimal value to print: ");
+// Input the number and move it to the BL.
+stdin.get(iDataValue);
+mov(iDataValue, BL);
+
+stdout.puti8(BL);
+stdout.put(" is ");
+
+// Exceute binary the left binary shift and LAHF to move bit to AH.  
+// Repeat it 8 times.
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+stdout.put("_");
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+SHL(1, BL);
+LAHF();
+and(%0000_0001, AH);
+stdout.puti8(AH);
+
+end binary_output;
