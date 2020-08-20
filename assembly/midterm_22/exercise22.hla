@@ -1,0 +1,54 @@
+program exercise22;
+#include ("stdlib.hhf");
+
+static
+
+iValue1 : int16:=0;
+iValue2 : int16:=0;
+iValue3 : int16:=0;
+
+
+procedure foo( data : int16 ); @nodisplay; @noframe;
+static
+    iTemp : int16;
+    iReturnAddress : dword;
+begin foo;
+    // retrieve return address from the stack
+    pop( iReturnAddress );
+    // retrieve 16 bits of padding from the stack
+    pop( iTemp );
+    // retrieve actual parameter from the stack
+    pop( data );
+    // restore the return address
+    push( iReturnAddress );
+    // do somework...
+    stdout.put("data : ", data, nl);
+    mov( 0, EAX );
+    mov( 0, EBX );
+    mov( 0, ECX );
+    mov( 0, EDX );
+    inc( EAX );
+    add( EBX, EAX );
+    stdout.put(EAX, nl);
+    inc( EBX );
+    add( EBX, ECX );
+    inc( EDX );
+    // return back to the calling code...
+    stdout.put(EDX, nl);
+    ret();
+end foo;
+
+begin exercise22;
+
+stdout.put("iValue1 : ");
+stdin.get(iValue1);
+
+//mov(0, BX);
+mov(iValue1, BX);
+push(BX);
+
+mov(0, BX);
+push(BX);
+
+call foo;
+end exercise22;

@@ -1,0 +1,104 @@
+//File : Same
+program Same;
+#include ( "stdlib.hhf");
+
+static 
+
+iDataValue1 : int16 := 0;
+iDataValue2 : int16 := 0;
+iDataValue3 : int16 := 0;
+iDataValue4 : int16 := 0;
+resultValue : int8 := 0;
+
+// This procedure checks that four intergers user input are same.
+// If All four intergers are same, then AL = 1.
+// Otherwise, AL = 0.
+procedure theSame( w:int16; x: int16; y: int16; z: int16); @nodisplay; @noframe;
+
+static
+
+iReturnAddress : dword;
+
+begin theSame;
+
+pop(iReturnAddress);
+pop(z);
+pop(y);
+pop(x);
+pop(w);
+push(iReturnAddress);
+
+mov(w, DX);
+
+// Check w=x.
+compareWX:
+cmp(x, DX);
+JE compareWY;
+JMP notEqualWXYZ;
+
+// Check w(=x)=y.
+compareWY:
+cmp(y, DX);
+JE compareWZ;
+JMP notEqualWXYZ;
+
+// Check w(=x=y)=z.
+compareWZ:
+cmp(z, DX);
+JE equalWXYZ;
+JMP notEqualWXYZ;
+
+// Return AL = 1 when all numbers are same.
+equalWXYZ:
+mov (1, AL);
+JMP exitTheSameFunction;
+
+// Return AL = 0 when all numbers are not same.
+notEqualWXYZ:
+mov (0, AL);
+JMP exitTheSameFunction;
+
+exitTheSameFunction:
+
+ret();
+
+end theSame;
+
+begin Same;
+
+// Get W, X, Y, Z.
+stdout.put("Feed me W : ");
+stdin.get(iDataValue1);
+stdout.put("Feed me X : ");
+stdin.get(iDataValue2);
+stdout.put("Feed me Y : ");
+stdin.get(iDataValue3);
+stdout.put("Feed me Z : ");
+stdin.get(iDataValue4);
+
+push(iDataValue1);
+push(iDataValue2);
+push(iDataValue3);
+push(iDataValue4);
+
+call theSame;
+
+// Move AL to resultValue to print out result decimal form.
+mov(AL, resultValue);
+cmp(resultValue, 0);
+JE notTheSame;
+JMP allSame;
+
+// Print out the result when all numbers are not same.
+notTheSame:
+stdout.put("Not the same. AL = ", resultValue, nl);
+JMP endProgram;
+
+// Print out the result when all numbers are same.
+allSame:
+stdout.put("Same. AL = ", resultValue, nl);
+JMP endProgram;
+
+endProgram:
+
+end Same;

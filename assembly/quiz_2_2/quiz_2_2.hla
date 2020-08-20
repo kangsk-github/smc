@@ -1,0 +1,97 @@
+//File : Quiz_2_2
+program Quiz_2_2;
+#include ( "stdlib.hhf");
+
+static 
+
+iDataValue1 : int8 := 0;
+iDataValue2 : int8 := 0;
+iDataValue3 : int8 := 0;
+iDataValue4 : int8 := 0;
+resultValue : int8 := 0;
+
+procedure largest( value1 : int8; value2 : int8; value3 : int8; value4 : int8 ); @nodisplay; @noframe;
+
+static
+
+iReturnAddress : dword;
+iTemporary : int16;
+
+begin largest;
+
+pop(iReturnAddress);
+
+pop(iTemporary);
+mov(iTemporary, BX);
+mov(BL, value4);
+
+pop(iTemporary);
+mov(iTemporary, BX);
+mov(BL, value3);
+
+pop(iTemporary);
+mov(iTemporary, BX);
+mov(BL, value2);
+
+pop(iTemporary);
+mov(iTemporary, BX);
+mov(BL, value1);
+
+push(iReturnAddress);
+
+mov(value1, DL);
+
+compare12:
+cmp(DL, value2);
+JL DL_is_Less_than_value2;
+JMP compare3;
+
+DL_is_Less_than_value2:
+mov(value2, DL);
+
+compare3:
+cmp(DL, value3);
+JL DL_is_Less_than_value3;
+JMP compare4;
+
+DL_is_Less_than_value3:
+mov(value3, DL);
+
+compare4:
+cmp(DL, value4);
+JL DL_is_Less_than_value4;
+JMP endFunction;
+
+DL_is_Less_than_value4:
+mov(value4, DL);
+
+endFunction:
+mov(DL, AH);
+ret();
+
+end largest;
+
+begin Quiz_2_2;
+
+mov(1, iDataValue1);
+mov(iDataValue1, BL);
+push(BX);
+
+mov(10, iDataValue2);
+mov(iDataValue2, BL);
+push(BX);
+
+mov(20, iDataValue3);
+mov(iDataValue3, BL);
+push(BX);
+
+mov(0, iDataValue4);
+mov(iDataValue4, BL);
+push(BX);
+
+call largest;
+
+mov(AH, resultValue);
+stdout.put( "largest(", iDataValue1, ",", iDataValue2, ",",iDataValue3, ",", iDataValue4, ") equals ", resultValue, "!");
+
+end Quiz_2_2;

@@ -1,0 +1,60 @@
+//File : Quiz_2_1
+program Quiz_2_1;
+#include ( "stdlib.hhf");
+
+static 
+sum : int16 := 0;
+iDataValue1 : int16 := 0;
+
+procedure summing( value : int8 ); @nodisplay; @noframe; 
+
+static
+
+iTemp : int16;
+iReturnAddress : dword;
+sum : int16 := 0;
+
+begin summing;
+
+pop(iReturnAddress);
+pop(iTemp);
+pop(DX);
+and(%0000_0000_1111_1111, DX);
+mov(DL, value);
+push(iReturnAddress);
+
+push(DX);
+
+pop(DX);
+ret();
+
+end summing;
+
+begin Quiz_2_1;
+
+stdout.put("Provide a letter : ");
+stdin.get(iDataValue1);
+stdout.put("summing(", iDataValue1, ") equals ");
+inc(iDataValue1);
+mov(iDataValue1, CX);
+
+callFunction:
+
+dec(iDataValue1);
+mov(iDataValue1, BX);
+push(BX);
+mov(0, BX);
+push(BX);
+
+call summing;
+
+add(DX, sum);
+
+cmp(DX, 0);
+je endProgram;
+jmp callFunction;
+
+endProgram:
+stdout.put(sum, "!", nl);
+
+end Quiz_2_1;

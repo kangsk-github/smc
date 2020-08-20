@@ -1,0 +1,14 @@
+program exercise22;
+#include ("stdlib.hhf");
+
+static
+
+
+begin exercise22;
+
+finit();
+fldz();
+fld1();
+fsub();
+
+end exercise22;

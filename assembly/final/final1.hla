@@ -1,0 +1,100 @@
+program StringProgram;
+
+#include( "stdlib.hhf" );
+#include( "cs17Final.hla" );
+
+static stringData : dword;
+
+procedure getSmallest( stringData : dword ); @nodisplay; @noframe;
+
+static
+dReturnAddress : dword;
+
+begin getSmallest;
+pop( dReturnAddress );
+pop (stringData);
+push( dReturnAddress );
+
+push( EBX );
+push( ECX );
+
+mov (0, AH);
+mov(stringData, EBX);
+mov([EBX], AL);
+mov(stringData, ECX);
+
+compareStart:
+
+inc(ECX);
+
+cmp([ECX], AH);
+je endCompare;
+
+cmp(AL, [ECX]);
+jle leftOneSmaller;
+jmp rightOneSmaller;
+
+leftOneSmaller:
+
+jmp compareStart;
+
+rightOneSmaller:
+mov([ECX], AL);
+jmp compareStart;
+
+endCompare:
+
+pop (ECX);
+pop (EBX);
+
+ret();
+
+// ->
+end getSmallest;
+// ->
+ 
+begin StringProgram; 
+
+stdout.put( "Please enter a string to process", nl );
+
+// this code allocates a string of size 80
+
+mov( @size( int8 ), AL );
+mov( 80, BL );
+inc( BL );
+mul( BL );
+mov( 0, EBX );
+mov( AX, BX );
+malloc( EBX );
+mov( EAX, stringData );
+
+// let's try reading a value into the string
+mov( stringData, EAX );
+push( EAX );
+mov( 80, CX );
+push( CX );
+
+call gets;
+
+
+stdout.put( "----> here is the string you entered: " );
+
+mov( stringData, EAX );
+push( EAX );
+call puts;
+
+stdout.newln();
+
+mov( 0, EAX );
+
+push(stringData);
+
+call getSmallest;
+
+stdout.put( "result=" );
+stdout.put( EAX );
+stdout.newln();
+free(stringData);
+
+end StringProgram;
+

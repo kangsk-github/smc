@@ -1,0 +1,108 @@
+program exercise2;
+#include ("stdlib.hhf");
+
+static
+start : int8:=0;
+value : int8:=0;
+amount : int8:=0;
+bool_positive : int8:=0;
+i : int8:=0;
+j : int8:=0;
+
+begin exercise2;
+
+stdout.put("Feed me : ");
+stdin.get(start);
+mov(start, BL);
+mov(BL, value);
+mov(1, CL);
+
+cmp(BL, 1);
+JL printout_done;
+
+increment_printout:
+
+intialize_increment_ForLp:
+mov(0, i);
+
+increment_ForLp_termination_test:
+cmp(i, BL);
+JE increment_printout_done;
+
+increment_printout_body:
+
+increment_printout_inner:
+
+initialize_increment_ForLp_inner:
+mov(0, j);
+
+increment_ForLp_termination_test_inner:
+cmp(j, CL);
+JE increment_printout_done_inner;
+
+increment_printout_body_inner:
+stdout.put("*");
+
+
+ForLp_increment_inner:
+inc(j);
+jmp increment_ForLp_termination_test_inner;
+
+increment_printout_done_inner:
+
+stdout.put(nl);
+
+ForLp_increment:
+inc(i);
+inc(CL);
+jmp increment_ForLp_termination_test;
+
+increment_printout_done:
+
+
+
+
+
+
+decrement_printout:
+
+intialize_decrement_ForLp:
+dec(BL);
+mov(BL, i);
+
+decrement_ForLp_termination_test:
+cmp(i, 0);
+JE decrement_printout_done;
+
+decrement_printout_body:
+
+decrement_printout_inner:
+
+initialize_decrement_ForLp_inner:
+mov(0, j);
+
+decrement_ForLp_termination_test_inner:
+cmp(j, BL);
+JE decrement_printout_done_inner;
+
+decrement_printout_body_inner:
+stdout.put("*");
+
+
+ForLp_decrement_inner:
+inc(j);
+jmp decrement_ForLp_termination_test_inner;
+
+decrement_printout_done_inner:
+
+stdout.put(nl);
+
+ForLp_decrement:
+dec(i);
+dec(BL);
+jmp decrement_ForLp_termination_test;
+
+decrement_printout_done:
+
+printout_done:
+end exercise2;

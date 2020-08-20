@@ -1,0 +1,92 @@
+//File : Surface Area Finder
+program Surface;
+#include ( "stdlib.hhf" );
+
+static
+
+	r : real32;
+	h : real32;
+	sphere_surface : real32;
+	cube_surface : real32;
+	cylinder_surface : real32;
+
+// This procedure calculates the surface are of sphere, cube, cylinder. 
+procedure surfaceFinder( r: real32; h : real32 ); @nodisplay; @noframe; 
+
+static
+
+	iReturnAddress : dword;
+	radius : real32;
+	height : real32;
+
+begin surfaceFinder;
+
+	pop(iReturnAddress);
+	pop(height);
+	pop(radius);
+	push(iReturnAddress);
+	
+	// Surface area of sphere = 4*pi*r*r
+	finit();
+	fld(4.0);
+	fldpi();
+	fld(radius);
+	fld(radius);
+	fmul();
+	fmul();
+	fmul();
+	fstp(sphere_surface);
+	
+	// Surface area of cube = 6*h*h
+	fld(6.0);
+	fld(height);
+	fld(height);
+	fmul();
+	fmul();
+	fstp(cube_surface);
+
+	// Surface area of cylinder = 2*pi*r*(r+h)
+	fld(2.0);
+	fldpi();
+	fld(radius);
+	fld(radius);
+	fmul();
+	fld(radius);
+	fld(height);
+	fmul();
+	fadd();
+	fmul();
+	fmul();
+	fstp(cylinder_surface);
+
+	ret();
+
+end surfaceFinder;
+
+
+begin Surface;
+
+	stdout.put( "Lemme calculate the volumes of various things!", nl );
+	stdout.put( "Gimme r : ");
+	stdin.get ( r );
+	stdout.put( "Gimme h : ");
+	stdin.get( h );
+	push(r);
+	push(h);
+
+call surfaceFinder;
+
+	// Print out the result
+	stdout.put("Surface Area of a sphere = ");
+	stdout.putr32(sphere_surface, 8, 5);
+	stdout.put(" square inches", nl);
+
+	stdout.put("Surface Area of a cube = ");
+	stdout.putr32(cube_surface, 8, 5);
+	stdout.put(" square inches", nl);
+
+	stdout.put("Surface Area of a cylinder = ");
+	stdout.putr32(cylinder_surface, 8, 5);
+	stdout.put(" square inches", nl);
+
+end Surface;

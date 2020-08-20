@@ -1,0 +1,61 @@
+program isNotFactorProgram;
+#include( "stdlib.hhf" );
+static
+
+iValue: int16 := 0;
+iFactor: int16 := 0;
+iAnswer : int32 := 0;
+
+procedure isNotFactor( value : int16; desiredFactor : int16 );@nodisplay; @noframe;
+
+static dReturnAddress : dword;
+
+begin isNotFactor;
+
+pop( dReturnAddress );
+pop(desiredFactor);
+pop(value);
+push( dReturnAddress );
+
+mov(desiredFactor, CX); 
+mov(0, BX);
+
+loopStart:
+
+sub(CX, value);
+cmp(value, BX);
+JG loopStart;
+JE factor;
+JL notFactor;
+
+factor:
+mov(0, EAX);
+jmp endLoop;
+
+notFactor:
+mov(1, EAX);
+jmp endLoop;
+
+endLoop:
+
+ret();
+
+end isNotFactor;
+
+
+begin isNotFactorProgram;
+
+mov( 16, iValue);
+mov( 7, iFactor );
+
+push(iValue);
+push(iFactor);
+
+call isNotFactor;
+
+mov( EAX, iAnswer );
+
+stdout.put( iAnswer );
+stdout.newln();
+
+end isNotFactorProgram;

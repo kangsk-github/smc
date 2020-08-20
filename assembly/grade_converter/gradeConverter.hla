@@ -1,0 +1,155 @@
+//File : Grade Converter
+program gradeConverter;
+#include ( "stdlib.hhf" );
+
+static
+
+	percent : real32;
+
+// This function returns a character value based on a floating point value
+// 90.0 - 100.0 : A
+// 80.0 - 89.0  : B
+// 70.0 - 79.0  : C
+// 60.0 - 69.0  : D
+// <=59.0       : F
+procedure grader( percentage : real32); @nodisplay; @noframe; 
+
+static
+
+	iReturnAddress : dword;
+	result1 : byte := 0;
+	
+begin grader;
+
+	pop(iReturnAddress);
+	pop(percentage);
+	push(iReturnAddress);
+	
+	// If the floating value >= 90,
+	// Then the character = 'A'.
+	finit();
+	fld(percentage);
+	fld(89.99);
+	fcomp();
+	fstsw(ax);
+	sahf();
+	setb(al);
+	cmp(al, 1);
+
+	je MoreThan90;
+	jmp LessThan90;
+	
+	MoreThan90 : 
+
+	mov($41, result1);
+	mov(result1, AL);
+	stdout.put("that's the grade: ");
+	stdout.putc(AL);
+	stdout.put(nl);
+	
+	jmp theEnd;
+
+	LessThan90 :
+
+	// If the floating value >= 80,
+	// Then the character = 'B'.
+	finit();
+	fld(percentage);
+	fld(79.99);
+	fcomp();
+	fstsw(ax);
+	sahf();
+	setb(al);
+	cmp(al, 1);
+
+	je MoreThan80;
+	jmp LessThan80;
+	
+	MoreThan80:
+
+	mov($42, result1);
+	mov(result1, AL);
+	stdout.put("that's the grade: ");
+	stdout.putc(AL);
+	stdout.put(nl);
+	jmp theEnd;
+
+	LessThan80 :
+
+	// If the floating value >= 70,
+	// Then the character = 'C'.
+	finit();
+	fld(percentage);
+	fld(69.99);
+	fcomp();
+	fstsw(ax);
+	sahf();
+	setb(al);
+	cmp(al, 1);
+
+	je MoreThan70;
+	jmp LessThan70;
+	
+	MoreThan70 : 
+
+	mov($43, result1);
+	mov(result1, AL);
+	stdout.put("that's the grade: ");
+	stdout.putc(AL);
+	stdout.put(nl);
+	
+	jmp theEnd;
+
+	LessThan70 :
+
+	// If the floating value >= 60,
+	// Then the character = 'D'.
+	finit();
+	fld(percentage);
+	fld(59.99);
+	fcomp();
+	fstsw(ax);
+	sahf();
+	setb(al);
+	cmp(al, 1);
+
+	je MoreThan60;
+	jmp LessThan60;
+	
+	MoreThan60 : 
+
+	mov($44, result1);
+	mov(result1, AL);
+	stdout.put("that's the grade: ");
+	stdout.putc(AL);
+	stdout.put(nl);
+	
+	jmp theEnd;
+
+	// If the floating value <= 59,
+	// Then the character = 'F'.
+	LessThan60 :
+	
+	mov($46, result1);
+	mov(result1, AL);
+	stdout.put("that's the grade: ");
+	stdout.putc(AL);
+	
+	theEnd:
+
+	ret();
+
+end grader;
+
+
+begin gradeConverter;
+
+	stdout.put( "Feed ME : " );
+	stdin.get ( percent );
+
+	push(percent);
+
+call grader;
+
+
+end gradeConverter;
